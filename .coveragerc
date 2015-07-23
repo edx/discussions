@@ -1,0 +1,10 @@
+[run]
+branch = True
+
+[report]
+include = discussions/*
+omit =
+    **/__init__.py
+    **/tests/*
+    **/settings/*
+    **/migrations*
