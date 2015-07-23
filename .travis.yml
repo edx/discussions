@@ -5,7 +5,7 @@ install:
   - "pip install -r requirements.txt"
   - "pip install coveralls"
 script:
-  - "python manage.py test"
+  - "python manage.py test --settings=discussions.settings.test"
 branches:
     only:
       - master
