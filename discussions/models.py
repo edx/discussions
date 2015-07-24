@@ -52,27 +52,27 @@ class Contents(Document):
         count = IntField()
         point = IntField()
 
-    _id = ObjectIdField(required=True, primary_key=True)
-    votes = DictField(required=True)
-    visible = BooleanField(required=True)
+    _id = ObjectIdField(primary_key=True)
+    votes = DictField()
+    visible = BooleanField()
     abuse_flaggers = ListField()  # TODO Double check this
     historical_abuse_flaggers = ListField()  # TODO Double check this
-    thread_type = StringField(required=True)  #TODO Can this be a ChoiceField?
-    comment_count = IntField(required=True)
+    thread_type = StringField()  #TODO Can this be a ChoiceField?
+    comment_count = IntField()
     at_position_list = ListField()  # TODO Double check this
     title = StringField(required=True)
     body = StringField(required=True)
     course_id = StringField(required=True)  # TODO Could we add a course id validator here?
     commentable_id = StringField(required=True)
     _type = StringField(required=True)  #TODO Can this be a ChoiceField?
-    anonymous = StringField(required=True)  # This is a boolean string -.-
-    anonymous_to_peers = StringField(required=True)  # This is a boolean string -.-
-    closed = StringField(required=True)  # This is a boolean string -.-
-    author_id = StringField(required=True)  # This is a int string -.-
-    author_username = StringField(required=True)
-    updated_at = DateTimeField(required=True)  # TODO is this DateTime
-    created_at = DateTimeField(required=True)  # TODO is this DateTime
-    last_activity_at = DateTimeField(required=True)  # TODO is this DateTime
+    anonymous = StringField()  # This is a boolean string -.-
+    anonymous_to_peers = StringField()  # This is a boolean string -.-
+    closed = StringField()  # This is a boolean string -.-
+    author_id = StringField()  # This is a int string -.-
+    author_username = StringField()
+    updated_at = DateTimeField()  # TODO is this DateTime
+    created_at = DateTimeField()  # TODO is this DateTime
+    last_activity_at = DateTimeField()  # TODO is this DateTime
     comment_thread_id = StringField()  # TODO I didn't see this in my database query
     parent_ids = ListField()  # TODO I didn't see this in my database query
     parent_id = StringField() # TODO Another mystery
@@ -81,11 +81,11 @@ class Contents(Document):
 
 
 class Subscriptions(Document):
-    _id = ObjectIdField(required=True, primary_key=True)
-    subscriber_id = StringField(required=True)  # This is a int string -.-
+    _id = ObjectIdField(primary_key=True)
+    subscriber_id = StringField()  # This is a int string -.-
     source_id = StringField(required=True)  # This is a int string -.-
     source_type = StringField(required=True)  #TODO Can this be a ChoiceField?
-    updated_at = DateTimeField(required=True)  # TODO is this DateTime
+    updated_at = DateTimeField()  # TODO is this DateTime
     created_at = DateTimeField(required=True)  # TODO is this DateTime
 
 

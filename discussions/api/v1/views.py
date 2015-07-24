@@ -1,6 +1,7 @@
 from rest_framework import generics
 from rest_framework.response import Response
 
+from discussions.api.v1.api import create_thread
 from discussions.api.v1.serializers import (
     ContentsSerializer,
     UserSerializer,
@@ -52,7 +53,7 @@ class SubscriptionsDetailView(generics.RetrieveAPIView):
         return Subscriptions.objects.get(_id=str(self.kwargs['_id']))
 
 
-class TopicsDetailView(generics.ListAPIView):
+class TopicsDetailView(generics.ListCreateAPIView):
     """
     API endpoint that allows users to be viewed.
     """
@@ -65,3 +66,5 @@ class TopicsDetailView(generics.ListAPIView):
         responses = Contents.objects.filter(commentable_id=str(self.kwargs['topic_id']))
         return Response([ContentsSerializer(response).data for response in responses])
 
+    def create(self, request, *args, **kwargs):
+        return Response(create_thread(request, request.DATA))
