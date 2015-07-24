@@ -14,4 +14,9 @@ urlpatterns = patterns('',
         views.ContentsDetailView.as_view(),
         name='retrieve_content'
     ),
+    url(
+        r'^subscriptions/(?P<_id>\w+)$', # TODO Look up our REST conventions
+        views.SubscriptionsDetailView.as_view(),
+        name='retrieve_subscription'
+    ),
 )

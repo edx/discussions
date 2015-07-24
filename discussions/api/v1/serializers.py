@@ -1,5 +1,10 @@
-from discussions.models import User, Contents
 from rest_framework_mongoengine.serializers import EmbeddedDocumentSerializer
+
+from discussions.models import (
+    Contents,
+    Subscriptions,
+    User,
+)
 
 
 class ReadStatesSerializer(EmbeddedDocumentSerializer):
@@ -24,3 +29,8 @@ class ContentsSerializer(EmbeddedDocumentSerializer):
 
     class Meta:
         model = Contents
+
+
+class SubscriptionsSerializer(EmbeddedDocumentSerializer):
+    class Meta:
+        model = Subscriptions

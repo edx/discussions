@@ -57,14 +57,14 @@ class Contents(Document):
     visible = BooleanField(required=True)
     abuse_flaggers = ListField()  # TODO Double check this
     historical_abuse_flaggers = ListField()  # TODO Double check this
-    thread_type = StringField(required=True)
+    thread_type = StringField(required=True)  #TODO Can this be a ChoiceField?
     comment_count = IntField(required=True)
     at_position_list = ListField()  # TODO Double check this
     title = StringField(required=True)
     body = StringField(required=True)
     course_id = StringField(required=True)  # TODO Could we add a course id validator here?
     commentable_id = StringField(required=True)
-    _type = StringField(required=True)
+    _type = StringField(required=True)  #TODO Can this be a ChoiceField?
     anonymous = StringField(required=True)  # This is a boolean string -.-
     anonymous_to_peers = StringField(required=True)  # This is a boolean string -.-
     closed = StringField(required=True)  # This is a boolean string -.-
@@ -77,4 +77,14 @@ class Contents(Document):
     parent_ids = ListField()  # TODO I didn't see this in my database query
     sk = StringField()  # TODO I didn't see this in my database query
     endorsed = BooleanField()  # TODO I didn't see this in my database query
+
+
+class Subscriptions(Document):
+    _id = ObjectIdField(required=True, primary_key=True)
+    subscriber_id = StringField(required=True)  # This is a int string -.-
+    source_id = StringField(required=True)  # This is a int string -.-
+    source_type = StringField(required=True)  #TODO Can this be a ChoiceField?
+    updated_at = DateTimeField(required=True)  # TODO is this DateTime
+    created_at = DateTimeField(required=True)  # TODO is this DateTime
+
 

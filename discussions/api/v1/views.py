@@ -1,9 +1,14 @@
 from rest_framework import generics
 
-from discussions.models import User, Contents
 from discussions.api.v1.serializers import (
+    ContentsSerializer,
     UserSerializer,
-    ContentsSerializer
+    SubscriptionsSerializer
+)
+from discussions.models import (
+    Contents,
+    User,
+    Subscriptions
 )
 
 
@@ -32,3 +37,15 @@ class ContentsDetailView(generics.RetrieveAPIView):
     def get_object(self):
         return Contents.objects.get(_id=str(self.kwargs['_id']))
 
+
+class SubscriptionsDetailView(generics.RetrieveAPIView):
+    """
+    API endpoint that allows users to be viewed.
+    """
+    serializer_class = SubscriptionsSerializer
+    queryset = Subscriptions.objects
+    lookup_field = '_id'
+
+    # shouldn't be necessary in theory but DRF is returning Not Found otherwise
+    def get_object(self):
+        return Subscriptions.objects.get(_id=str(self.kwargs['_id']))
