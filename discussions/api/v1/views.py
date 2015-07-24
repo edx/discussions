@@ -3,8 +3,8 @@ from rest_framework import generics
 from rest_framework.request import clone_request
 from rest_framework.response import Response
 
-from discussions.api.v1.serializers import UserSerializer
-from discussions.models import User
+from discussions.api.v1.serializers import PaginatedThreadSerializer, UserSerializer
+from discussions.models import CommentThread, User
 
 
 class UserDetailView(generics.RetrieveAPIView, generics.UpdateAPIView):
@@ -47,3 +47,17 @@ class UserDetailView(generics.RetrieveAPIView, generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save(**extra_kwargs)
         return Response(serializer.data)
+
+
+class ThreadListView(generics.ListAPIView):
+    """
+    API endpoint that allows threads to be viewed.
+    """
+    paginate_by = 10
+    paginate_by_param = 'per_page'
+    pagination_serializer_class = PaginatedThreadSerializer
+
+    def get(self, request):
+        comment_threads = CommentThread.objects
+        page = self.paginate_queryset(comment_threads)
+        serializer = self.pagination_serializer_class(page)
