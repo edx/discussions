@@ -2,10 +2,13 @@
 Models for the discussions app.
 """
 from mongoengine import (
+    BooleanField,
+    DateTimeField,
     DictField,
     Document,
     EmbeddedDocument,
     EmbeddedDocumentListField,
+    IntField,
     ListField,
     ObjectIdField,
     StringField
@@ -37,3 +40,42 @@ class User(Document):
     # TODO: implement notification model and set up has_and_belongs_to_many
     # relationship as defined in comments_service
     notification_ids = ListField(required=True)
+
+
+class Contents(Document):
+    class Votes(EmbeddedDocument):
+        """Represents threads read by the user."""
+        up = ListField()  # TODO Double check this
+        down = ListField()  # TODO Double check this
+        up_count = IntField()
+        down_count = IntField()
+        count = IntField()
+        point = IntField()
+
+    _id = ObjectIdField(required=True, primary_key=True)
+    votes = DictField(required=True)
+    visible = BooleanField(required=True)
+    abuse_flaggers = ListField()  # TODO Double check this
+    historical_abuse_flaggers = ListField()  # TODO Double check this
+    thread_type = StringField(required=True)
+    comment_count = IntField(required=True)
+    at_position_list = ListField()  # TODO Double check this
+    title = StringField(required=True)
+    body = StringField(required=True)
+    course_id = StringField(required=True)  # TODO Could we add a course id validator here?
+    commentable_id = StringField(required=True)
+    _type = StringField(required=True)
+    anonymous = StringField(required=True)  # This is a boolean string -.-
+    anonymous_to_peers = StringField(required=True)  # This is a boolean string -.-
+    closed = StringField(required=True)  # This is a boolean string -.-
+    author_id = StringField(required=True)  # This is a int string -.-
+    author_username = StringField(required=True)
+    updated_at = DateTimeField(required=True)  # TODO is this DateTime
+    created_at = DateTimeField(required=True)  # TODO is this DateTime
+    last_activity_at = DateTimeField(required=True)  # TODO is this DateTime
+    comment_thread_id = StringField()  # TODO I didn't see this in my database query
+    parent_ids = ListField()  # TODO I didn't see this in my database query
+    parent_id = StringField()
+    sk = StringField()  # TODO I didn't see this in my database query
+    endorsed = BooleanField()  # TODO I didn't see this in my database query
+
