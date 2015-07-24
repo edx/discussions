@@ -6,8 +6,8 @@ from discussions.api.v1 import views
 urlpatterns = patterns(
     '',
     url(
-        r'^users/(?P<external_id>\d+)$',
+        r'^users/(?P<user_id>\d+)$',
         views.UserDetailView.as_view(),
-        name='retrieve_user'
-    )
+        name='user_detail'
+    ),
 )

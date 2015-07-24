@@ -38,10 +38,10 @@ class User(Document):
     _id = StringField(default=external_id, required=True, primary_key=True)
     username = StringField(required=True)
     default_sort_key = StringField(default='date', required=True)
-    read_states = EmbeddedDocumentListField(ReadState, required=True)
+    read_states = EmbeddedDocumentListField(ReadState, default=[])
     # TODO: implement notification model and set up has_and_belongs_to_many
     # relationship as defined in comments_service
-    notification_ids = ListField(required=True)
+    notification_ids = ListField(default=[])
 
 
 class Content(Document):
