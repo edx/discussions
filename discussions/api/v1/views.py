@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.response import Response
 
 from discussions.api.v1.serializers import (
     ContentsSerializer,
@@ -49,3 +50,18 @@ class SubscriptionsDetailView(generics.RetrieveAPIView):
     # shouldn't be necessary in theory but DRF is returning Not Found otherwise
     def get_object(self):
         return Subscriptions.objects.get(_id=str(self.kwargs['_id']))
+
+
+class TopicsDetailView(generics.ListAPIView):
+    """
+    API endpoint that allows users to be viewed.
+    """
+    serializer_class = ContentsSerializer
+    queryset = Contents.objects
+    lookup_field = 'topic_id'
+
+    def get(self, request, topic_id):
+        # TODO Case when topic id is missing? Currently returns 200
+        responses = Contents.objects.filter(commentable_id=str(self.kwargs['topic_id']))
+        return Response([ContentsSerializer(response).data for response in responses])
+

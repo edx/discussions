@@ -75,6 +75,7 @@ class Contents(Document):
     last_activity_at = DateTimeField(required=True)  # TODO is this DateTime
     comment_thread_id = StringField()  # TODO I didn't see this in my database query
     parent_ids = ListField()  # TODO I didn't see this in my database query
+    parent_id = StringField() # TODO Another mystery
     sk = StringField()  # TODO I didn't see this in my database query
     endorsed = BooleanField()  # TODO I didn't see this in my database query
 

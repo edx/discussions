@@ -15,8 +15,13 @@ urlpatterns = patterns('',
         name='retrieve_content'
     ),
     url(
-        r'^subscriptions/(?P<_id>\w+)$', # TODO Look up our REST conventions
+        r'^subscriptions/(?P<_id>\w+)$',  # TODO Look up our REST conventions
         views.SubscriptionsDetailView.as_view(),
         name='retrieve_subscription'
+    ),
+    url(
+        r'^(?P<topic_id>[-\w]+)/threads$',  # TODO Look up our REST conventions
+        views.TopicsDetailView.as_view(),
+        name='retrieve_topic_threads'
     ),
 )
