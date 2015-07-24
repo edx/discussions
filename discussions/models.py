@@ -2,12 +2,11 @@
 Models for the discussions app.
 """
 from mongoengine import (
-    DateTimeField,
+    DictField,
     Document,
     EmbeddedDocument,
     EmbeddedDocumentListField,
     ListField,
-    MapField,
     ObjectIdField,
     StringField
 )
@@ -18,7 +17,8 @@ class User(Document):
     class ReadState(EmbeddedDocument):
         """Represents threads read by the user."""
         _id = ObjectIdField(required=True)
-        last_read_times = MapField(field=DateTimeField(), required=True)
+        # TODO These values in this dict need to be validated
+        last_read_times = DictField(required=True)
         course_id = StringField(required=True)
 
     meta = {
