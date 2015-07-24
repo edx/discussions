@@ -59,6 +59,7 @@ class Content(Document):
         count = IntField(default=0)
         point = IntField(default=0)
 
+    _id = ObjectIdField(required=True)
     visible = BooleanField(default=True)
     abuse_flaggers = ListField(default=[])
     historical_abuse_flaggers = ListField(default=[])
@@ -98,7 +99,7 @@ class Comment(Content):
     endorsed = BooleanField(default=False)
     endorsement = DictField()
     sk = StringField(default=None)
-    comment_thread_id = ObjectIdField()
+    comment_thread_id = ObjectIdField(required=True)
     parent_ids = ListField()
 
     @queryset_manager
