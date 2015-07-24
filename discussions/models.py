@@ -91,6 +91,7 @@ class CommentThread(Content):
     def objects(doc_cls, queryset):
         return queryset(_type='CommentThread')
 
+
 class Comment(Content):
     """Represents a Comment."""
     meta = {'collection': 'contents'}
@@ -104,3 +105,12 @@ class Comment(Content):
     @queryset_manager
     def objects(doc_cls, queryset):
         return queryset(_type='Comment')
+
+
+class Subscription(Document):
+    _id = ObjectIdField(required=True, primary_key=True)
+    subscriber_id = StringField(required=True)
+    source_id = StringField(required=True)
+    source_type = StringField(required=True)  #TODO Can this be a ChoiceField?
+    updated_at = DateTimeField(required=True)  # TODO is this DateTime
+    created_at = DateTimeField(required=True)  # TODO is this DateTime

@@ -1,7 +1,7 @@
 from rest_framework import generics
 
-from discussions.models import User
 from discussions.api.v1.serializers import UserSerializer
+from discussions.models import User
 
 
 class UserDetailView(generics.RetrieveAPIView):
