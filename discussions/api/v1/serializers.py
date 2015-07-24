@@ -1,5 +1,6 @@
-from discussions.models import User
 from rest_framework_mongoengine.serializers import EmbeddedDocumentSerializer
+
+from discussions.models import Subscription, User
 
 
 class ReadStatesSerializer(EmbeddedDocumentSerializer):
