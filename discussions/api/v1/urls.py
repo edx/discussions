@@ -10,4 +10,9 @@ urlpatterns = patterns(
         views.UserDetailView.as_view(),
         name='user_detail'
     ),
+    url(
+        r'^threads/$',
+        views.ThreadListView.as_view(),
+        name='threads'
+    )
 )
