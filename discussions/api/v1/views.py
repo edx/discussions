@@ -61,3 +61,4 @@ class ThreadListView(generics.ListAPIView):
         comment_threads = CommentThread.objects
         page = self.paginate_queryset(comment_threads)
         serializer = self.pagination_serializer_class(page)
+        return Response(serializer.data)
