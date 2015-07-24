@@ -1,17 +1,49 @@
+from django.http import Http404
 from rest_framework import generics
+from rest_framework.request import clone_request
+from rest_framework.response import Response
 
 from discussions.api.v1.serializers import UserSerializer
 from discussions.models import User
 
 
-class UserDetailView(generics.RetrieveAPIView):
+class UserDetailView(generics.RetrieveAPIView, generics.UpdateAPIView):
     """
     API endpoint that allows users to be viewed.
     """
     serializer_class = UserSerializer
-    queryset = User.objects
-    lookup_field = 'external_id'
 
-    # shouldn't be necessary in theory but DRF is returning Not Found otherwise
     def get_object(self):
-        return User.objects.get(external_id=self.kwargs['external_id'])
+        try:
+            return User.objects.get(external_id=self.kwargs['user_id'])
+        except User.DoesNotExist:
+            raise Http404
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        extra_kwargs = {}
+        try:
+            instance = self.get_object()
+        except Http404:
+            # this is derived from https://gist.github.com/tomchristie/a2ace4577eff2c603b1b
+            # and supports PUT as create.
+            if self.request.method == 'PUT':
+                # For PUT-as-create operation, we need to ensure that we have
+                # relevant permissions, as if this was a POST request.  This
+                # will either raise a PermissionDenied exception, or simply
+                # return None.
+                self.check_permissions(clone_request(self.request, 'POST'))
+                instance = None
+                extra_kwargs.update({
+                    "id": kwargs['user_id'],
+                    "external_id": kwargs['user_id'],
+                })
+            else:
+                # PATCH requests where the object does not exist should still
+                # return a 404 response.
+                raise
+
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(**extra_kwargs)
+        return Response(serializer.data)
