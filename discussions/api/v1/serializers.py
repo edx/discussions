@@ -1,4 +1,4 @@
-from discussions.models import User
+from discussions.models import User, Contents
 from rest_framework_mongoengine.serializers import EmbeddedDocumentSerializer
 
 
@@ -12,3 +12,15 @@ class UserSerializer(EmbeddedDocumentSerializer):
 
     class Meta:
         model = User
+
+
+class VotesSerializer(EmbeddedDocumentSerializer):
+    class Meta:
+        model = Contents.Votes
+
+
+class ContentsSerializer(EmbeddedDocumentSerializer):
+    votes = VotesSerializer()
+
+    class Meta:
+        model = Contents

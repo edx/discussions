@@ -9,4 +9,9 @@ urlpatterns = patterns('',
         views.UserDetailView.as_view(),
         name='retrieve_user'
     ),
+    url(
+        r'^content/(?P<_id>\w+)$',
+        views.ContentsDetailView.as_view(),
+        name='retrieve_content'
+    ),
 )
