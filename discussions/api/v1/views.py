@@ -1,9 +1,10 @@
 from django.http import Http404
-from rest_framework import generics
+from mongoengine.queryset import Q
+from rest_framework import filters, generics
 from rest_framework.request import clone_request
 from rest_framework.response import Response
 
-from discussions.api.v1.serializers import PaginatedThreadSerializer, UserSerializer
+from discussions.api.v1.serializers import PaginatedThreadSerializer, UserSerializer, ThreadSerializer
 from discussions.models import CommentThread, User
 
 
@@ -49,16 +50,71 @@ class UserDetailView(generics.RetrieveAPIView, generics.UpdateAPIView):
         return Response(serializer.data)
 
 
+class ThreadQueryFilterBackend(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        """
+        Return a filtered queryset.
+        """
+        # handle course_id
+        queryset = queryset.filter(course_id=request.GET['course_id'])
+
+        # handle commentable_ids
+        commentable_ids = request.GET.get('commentable_ids', '')
+        if commentable_ids:
+            queryset = queryset.filter(commentable_id__in=commentable_ids.split(','))
+
+        # handle group_id / group_ids
+        group_id_values = [request.GET[k].strip() for k in ('group_id', 'group_ids') if k in request.GET]
+        # TODO: if both group_id and group_ids are sent, Bad Request
+        assert len(group_id_values) < 2, "cannot pass both group_id and group_ids"
+        if group_id_values:
+            group_ids = group_id_values[0].split(',')
+            q_no_group_id = Q(group_id__not__exists=True)
+            q_match_group_id = Q(group_id=group_ids[0]) if len(group_ids) == 1 else Q(group_id__in=group_ids)
+            queryset = queryset.filter(q_match_group_id | q_no_group_id)
+
+        # TODO handle flagged
+        # TODO handle unread
+        # TODO handle unanswered
+
+        return queryset
+
+
+class ThreadSortFilterBackend(filters.BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        """
+        Return a filtered queryset.
+        """
+        sort_key = {
+            "activity": "last_activity_at",
+            "votes": "votes.point",
+            "comments": "comment_count",
+        }.get(
+            request.GET.get("sort_key"),
+            "created_at"
+        )
+
+        sort_order = "" if request.GET.get("sort_order") == "asc" else "-"
+
+        order_by = ["-pinned", sort_order + sort_key]
+        if sort_key not in ("last_activity_at", "created_at"):
+            order_by.append("-created_at")
+
+        return queryset.order_by(*order_by)
+
+
 class ThreadListView(generics.ListAPIView):
     """
     API endpoint that allows threads to be viewed.
     """
-    paginate_by = 10
+    # TODO re-implement pagination correctly, using non-deprecated APIs.
+    # see http://www.django-rest-framework.org/api-guide/pagination/
+    paginate_by = 20  # should come from request
     paginate_by_param = 'per_page'
     pagination_serializer_class = PaginatedThreadSerializer
 
-    def get(self, request):
-        comment_threads = CommentThread.objects
-        page = self.paginate_queryset(comment_threads)
-        serializer = self.pagination_serializer_class(page)
-        return Response(serializer.data)
+    queryset = CommentThread.objects
+    filter_backends = (ThreadQueryFilterBackend, ThreadSortFilterBackend, )
+    serializer_class = ThreadSerializer

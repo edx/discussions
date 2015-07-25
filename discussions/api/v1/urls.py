@@ -11,7 +11,7 @@ urlpatterns = patterns(
         name='user_detail'
     ),
     url(
-        r'^threads/$',
+        r'^threads$',
         views.ThreadListView.as_view(),
         name='threads'
     )
