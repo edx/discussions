@@ -1,5 +1,3 @@
-# discussions
+# [ARCHIVED] Hackathon Port of Discussions to Python
 
-This repository is unused/dead-- it was created as a hackathon project, and has been abandoned.
-
-Note that this repository uses out-of-date versions of libraries that have known security issues (via requirements.txt). If this repository were to be used, the first step would be to update libraries to pick up security updates.
+This repository has been archived and is no longer supported-- use it at your own risk. This repository may depend on out-of-date libraries with security issues, and security updates will not be provided. Pull requests against this repository will also not be merged.
